@@ -4,7 +4,8 @@ import { getPersons, hirePerson, firePerson } from "../../ducks/person";
 
 export default connect(
   state => ({
-    persons: state.person.get("persons")
+    persons: state.person.get("persons"),
+    loading: state.ui.get("loading") > 0 ? true : false
   }),
   {
     getPersons,
