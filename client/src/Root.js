@@ -3,6 +3,7 @@ import App from "./components/containers/AppContainer";
 import { TypographyStyle, GoogleFont } from "react-typography";
 import typography from "./services/typography";
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 
 const Root = props => {
   const { store } = props;
@@ -11,7 +12,9 @@ const Root = props => {
     <>
       <TypographyStyle typography={typography} />
       <Provider store={store}>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </Provider>
     </>
   );
