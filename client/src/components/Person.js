@@ -23,7 +23,11 @@ const Person = props => {
       <strong>{person.lastName}</strong>, {person.firstName},{" "}
       {person.age.toFixed(2)}
       <div>
-        <Button block onClick={() => firePerson(person.id)}>
+        <Button
+          disabled={person.isFiring || person.isRelatedtoCSO}
+          block
+          onClick={() => firePerson(person.id)}
+        >
           vapauta
         </Button>
       </div>

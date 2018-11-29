@@ -10,6 +10,11 @@ export default styled.button`
     background-color: rgba(200, 200, 200, 1);
   }
 
+  &:disabled {
+    opacity: 0.1;
+    cursor: not-allowed;
+  }
+
   ${props =>
     props.block &&
     css`

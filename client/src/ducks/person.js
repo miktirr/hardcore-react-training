@@ -2,7 +2,7 @@ import { Map, List } from "immutable";
 import personService from "../services/person";
 
 const defaultState = Map({
-  persons: List()
+  persons: Map()
 });
 
 const HIRE_PERSON = "HIRE_PERSON";
@@ -29,7 +29,10 @@ export const hirePerson = person => {
 export const firePerson = id => {
   return {
     type: FIRE_PERSON,
-    payload: personService.firePerson(id)
+    payload: {
+      promise: personService.firePerson(id),
+      data: id
+    }
   };
 };
 
@@ -59,17 +62,26 @@ export default function personReducer(state = defaultState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case FIRE_PERSON_PENDING:
+      return state.updateIn(["persons", payload], p => {
+        return {
+          ...p,
+          isFiring: true
+        };
+      });
+
     case GET_PERSONS_FULFILLED:
-      return state.set("persons", List(payload));
+      return state.set("persons", Map(payload.map(p => [p.id, p])));
 
     // Huom. update tässä immutable Mapin ominaisuus, ei yleistä JS:ää
     case FIRE_PERSON_FULFILLED:
-      return state.update("persons", persons =>
-        persons.filter(p => p.id !== payload)
-      );
+      // return state.update("persons", persons => persons.remove(payload));
+      return state.removeIn(["persons", payload]);
 
     case HIRE_PERSON_FULFILLED:
-      return state.update("persons", persons => persons.push(payload));
+      return state.update("persons", persons =>
+        persons.set(payload.id, payload)
+      );
 
     default:
       return state;
