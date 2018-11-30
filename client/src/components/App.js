@@ -1,10 +1,13 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import Loading from "./Loading";
-import IndexPage from "./IndexPage";
 import { Switch, Route } from "react-router";
-import PersonPage from "./PersonPage";
+// import IndexPage from "./IndexPage";
+// import PersonPage from "./PersonPage";
 
 import "./App.pcss";
+
+const IndexPage = lazy(() => import("./IndexPage"));
+const PersonPage = lazy(() => import("./PersonPage"));
 
 class App extends React.Component {
   componentDidMount() {
@@ -27,11 +30,13 @@ class App extends React.Component {
             exact
             render={props => {
               return (
-                <IndexPage
-                  persons={persons}
-                  hirePerson={hirePerson}
-                  firePerson={firePerson}
-                />
+                <Suspense fallback={<div>laddare!!</div>}>
+                  <IndexPage
+                    persons={persons}
+                    hirePerson={hirePerson}
+                    firePerson={firePerson}
+                  />
+                </Suspense>
               );
             }}
           />
@@ -41,7 +46,11 @@ class App extends React.Component {
             render={props => {
               const pid = props.match.params.id;
               const person = persons.get(pid);
-              return <PersonPage person={person} />;
+              return (
+                <Suspense fallback={<div>laddare!!</div>}>
+                  <PersonPage person={person} />
+                </Suspense>
+              );
             }}
           />
         </Switch>
